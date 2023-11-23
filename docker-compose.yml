@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  web:
+    build: .
+    container_name: shipment_receiver
+    ports:
+      - "9001:9001"
+    env_file: [.env]
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: docker.arvancloud.ir/postgres:latest
+    container_name: postgres
+    env_file: [.env]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: docker.arvancloud.ir/redis:latest
+    container_name: redis
+
+  load_data:
+    build: .
+    container_name: shipment_receiver-loaddata
+    command: "python manage.py load_data  ./shipment.csv"
+    env_file: [.env]
+    user: root
+    depends_on:
+      - web
+      - db
+      - redis
