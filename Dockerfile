@@ -14,5 +14,5 @@ RUN if [ -n "${HTTP_PROXY}" ]; then \
 COPY . /app/
 
 ENV PYTHONUNBUFFERED 1
-
+RUN ["chmod", "+x", "./entrypoint.sh"]
 CMD [ "./entrypoint.sh" ]
