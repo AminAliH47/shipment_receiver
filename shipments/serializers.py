@@ -6,13 +6,14 @@ from shipments.utils import get_data_from_weather_api
 
 
 class ShipmentsSerializer(serializers.ModelSerializer):
+    carrier = serializers.StringRelatedField()
     articles = ArticlesSerializer(many=True)
     weather = serializers.SerializerMethodField()
 
     def get_weather(self, obj):
-        print(obj.receiver_address)
+        city = str(obj.receiver_address).split(' ')[3][:-1]
 
-        return get_data_from_weather_api('Paris')
+        return get_data_from_weather_api(city)
 
     class Meta:
         model = Shipments

@@ -29,7 +29,7 @@ services:
   load_data:
     build: .
     container_name: shipment_receiver-loaddata
-    command: "python manage.py load_data  ./shipment.csv"
+    command: "python manage.py load_data ./shipment.csv"
     env_file: [.env]
     user: root
     depends_on:

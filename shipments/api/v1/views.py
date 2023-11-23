@@ -1,5 +1,7 @@
 from rest_framework.generics import ListAPIView
-from shipments import models, serializers, filters
+from shipments import models, serializers
+from shipments.filters import ShipmentFilters
+import django_filters.rest_framework as filters
 
 
 class ShipmentsListView(ListAPIView):
@@ -9,4 +11,5 @@ class ShipmentsListView(ListAPIView):
         filter(is_deleted=False)
     )
     serializer_class = serializers.ShipmentsSerializer
-    filterset_class = filters.ShipmentFilters
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ShipmentFilters
