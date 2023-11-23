@@ -36,3 +36,14 @@ services:
       - web
       - db
       - redis
+
+  test:
+    build: .
+    container_name: shipment_receiver-test
+    command: "python manage.py test"
+    env_file: [.env]
+    user: root
+    depends_on:
+      - web
+      - db
+      - redis
